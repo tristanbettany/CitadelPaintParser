@@ -16,9 +16,10 @@ foreach($mainContent as $contentItem) {
     }
 }
 
+$products = [];
 if (empty($records) === false) {
     foreach($records as $record) {
-        $wut = 'product.displayName';
-        echo reset($record->attributes->$wut) . "\n";
+        $productNameKey = 'product.displayName';
+        echo reset($record->attributes->$productNameKey) . "\n";
     }
 }
