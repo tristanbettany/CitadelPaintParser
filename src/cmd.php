@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$json = json_decode(file_get_contents(__DIR__ . '/response.json'));
+$json = json_decode(file_get_contents(__DIR__ . '/../data/searchResponse.json'));
 
 $contents = reset($json->contents);
 $mainContent = $contents->mainContent;

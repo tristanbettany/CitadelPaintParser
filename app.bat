@@ -6,7 +6,7 @@ IF ERRORLEVEL 1 CALL :DEFAULT_CASE
 ECHO Done!
 EXIT /B
 
-:CASE_install
+:CASE_build
     ECHO Removing temporary application files...
     @RD /S /Q "vendor"
     ECHO Building...
@@ -15,13 +15,25 @@ EXIT /B
     docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm composer install
     GOTO END_CASE
 
+:CASE_install
+    ECHO Removing temporary application files...
+    @RD /S /Q "vendor"
+    ECHO Install dependancies...
+    docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm composer install
+    GOTO END_CASE
+
+:CASE_update
+    ECHO Updating dependancies...
+    docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm composer update
+    GOTO END_CASE
+
 :CASE_exec
-    ECHO Testing...
     docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm php src/cmd.php
     GOTO END_CASE
 
 :CASE_destroy
     ECHO Destroying...
+    @RD /S /Q "vendor"
     docker stop tristanbettany:cpm
     docker rm tristanbettany:cpm
     GOTO END_CASE

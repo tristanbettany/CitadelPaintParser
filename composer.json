@@ -1,3 +1,17 @@
 {
-    "name": "tristanbettany/citadel-paint-parser"
+    "name": "tristanbettany/citadel-paint-parser",
+    "description": "Citadel Paint Parser",
+    "version": "v1.0.0",
+    "authors": [
+        {
+            "name": "Tristan Bettany",
+            "homepage": "http://www.tristanbettany.com",
+            "email": "hi@tristanbettany.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    }
 }
