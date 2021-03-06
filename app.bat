@@ -28,7 +28,7 @@ EXIT /B
     GOTO END_CASE
 
 :CASE_exec
-    docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm php src/cmd.php
+    docker run -it --rm -v %cd%:/app -w /app tristanbettany:cpm php cli %2
     GOTO END_CASE
 
 :CASE_destroy
