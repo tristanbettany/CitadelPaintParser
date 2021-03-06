@@ -39,6 +39,11 @@ final class Parser
                 $price = (float) $fieldObj->price;
 
                 $nameVal = reset($record->attributes->$nameKey);
+
+                if (str_contains($nameVal, 'Collection') === true) {
+                    continue;
+                }
+
                 preg_match_all(
                     $this->getRegexForString($nameVal),
                     $nameVal,
@@ -68,11 +73,22 @@ final class Parser
 
                 $nameVal = trim($nameVal);
 
+                //Image
+                $imageKey = 'product.imageName';
+                $imageBaseUrl = 'https://www.games-workshop.com/resources/catalog/product/600x620/';
+                $imageUrl = $imageBaseUrl . reset($record->attributes->$imageKey);
+
+                $color = '';
+                if (str_contains($imageUrl, '.svg') === true) {
+                    $color = $this->processSVG($imageUrl);
+                }
+
                 $this->products[] = [
                     'name' => $nameVal,
                     'sku' => reset($record->attributes->$skuKey),
                     'price' => $price,
-                    'type' => $type
+                    'type' => $type,
+                    'color' => $color,
                 ];
             }
         }
@@ -80,12 +96,26 @@ final class Parser
         return $this;
     }
 
+    private function processSVG(string $imageUrl): string
+    {
+        $imageContents = file_get_contents($imageUrl);
+
+        $pattern = "/fill=\"(#.{6})\"/m";
+        preg_match($pattern, $imageContents, $matches);
+
+        if (empty($matches) === false) {
+            return $matches[1];
+        }
+
+        return '';
+    }
+
     public function getProducts(): array
     {
         return $this->products;
     }
 
-    private function getRegexForString(string $str)
+    private function getRegexForString(string $str): string
     {
         if (
             str_contains($str, 'UK/ROW') === true
